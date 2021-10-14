@@ -13,8 +13,9 @@ class FnState:
     def set_result(self, bind_value: FnResult) -> any:
         self._state['result'] = bind_value
 
-    def get_bind(self, bind_key) -> any:
-        return self._state[bind_key]
+    def get_bind(self, bind_key) -> FnResult:
+        bind = self._state[bind_key]
+        return bind.data
 
     def get_result(self):
         if 'result' in self._state:
