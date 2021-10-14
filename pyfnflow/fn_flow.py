@@ -21,7 +21,7 @@ def a(func):
     return _FN_TYPE_AFTER, func
 
 
-def fn_run(functions: list[callable(any)]):
+def run(functions: list[callable(any)]):
     state = FnState()
     for fn_type, func in functions:
         rs = func(state)
