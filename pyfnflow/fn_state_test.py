@@ -32,3 +32,15 @@ class TestFnState:
 
         state.set_bind("key1", fn_result.FnOk("hello3"))
         assert state.get_bind("key1") == "hello3"
+
+    def test_fn_state_result(self):
+        state = fn_state.FnState()
+        state.set_result(fn_result.FnOk("hello"))
+        result = state.get_result()
+        assert isinstance(result, fn_result.FnOk)
+        assert result.data == "hello"
+
+        state.set_result(fn_result.FnOk("hello2"))
+        result = state.get_result()
+        assert isinstance(result, fn_result.FnOk)
+        assert result.data == "hello2"
