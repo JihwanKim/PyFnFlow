@@ -1,29 +1,29 @@
-from fn_state import FnState
-from fn_result import FnResult, FnOk, FnFail
+from .fn_state import FnState
+from .fn_result import FnResult, FnOk, FnFail
 
 _FN_TYPE_BIND = "bind"
 _FN_TYPE_DO = "do"
 _FN_TYPE_AFTER = "after"
 
 
-# fn bind
+# function for bind
 def b(bind_key, func):
     return _FN_TYPE_BIND, bind_key, func
 
 
-# fn do
+# function for do
 def d(func):
-    return _FN_TYPE_DO, func
+    return _FN_TYPE_DO, None, func
 
 
-# fn after
+# function for after
 def a(func):
-    return _FN_TYPE_AFTER, func
+    return _FN_TYPE_AFTER, None, func
 
 
 def run(functions: list[callable(any)]):
     state = FnState()
-    for fn_type, func in functions:
+    for fn_type, bind_key, func in functions:
         rs = func(state)
 
         if not isinstance(rs, FnResult):
@@ -32,25 +32,25 @@ def run(functions: list[callable(any)]):
 
         elif isinstance(rs, FnOk):
             if fn_type == _FN_TYPE_BIND:
-                state.set_bind(rs.data)
+                state.set_bind(bind_key, rs.data)
             elif fn_type == _FN_TYPE_DO:
-                state.set_result(rs.data)
+                state.set_result(rs)
             elif fn_type == _FN_TYPE_AFTER:
                 pass
 
         elif isinstance(rs, FnFail):
             if fn_type == _FN_TYPE_BIND:
                 pass
-                state.set_result(rs.data)
+                state.set_result(rs)
                 break
             elif fn_type == _FN_TYPE_DO:
                 pass
-                state.set_result(rs.data)
+                state.set_result(rs)
                 break
             elif fn_type == _FN_TYPE_AFTER:
                 pass
-                state.set_result(rs.data)
+                state.set_result(rs)
                 break
         else:
             pass
-    state.get_result()
+    return state.get_result()

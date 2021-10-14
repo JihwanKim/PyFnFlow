@@ -1,4 +1,4 @@
-from fn_result import FnResult, FnOk, FnFail
+from .fn_result import FnResult, FnOk, FnFail
 
 
 class FnState:
@@ -17,4 +17,7 @@ class FnState:
         return self._state[bind_key]
 
     def get_result(self):
-        return self._state['result']
+        if 'result' in self._state:
+            return self._state['result']
+        else:
+            return None
