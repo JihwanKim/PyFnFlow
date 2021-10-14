@@ -1,1 +1,4 @@
 .idea
+__pytest_cache
+__pycache__
+pyfnflow.egg-info
