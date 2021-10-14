@@ -1,7 +1,7 @@
 from pyfnflow import fn_flow
 
 
-class TestFnFlow:
+class TestFnFlowBasicFunction:
     def test_bind(self):
         (fn_type, bind_key, _) = fn_flow.b("bind_key", lambda _state: "hello")
         assert fn_type == fn_flow._FN_TYPE_BIND
@@ -14,3 +14,8 @@ class TestFnFlow:
     def test_after(self):
         (fn_type, _, _) = fn_flow.a(lambda _state: "hello")
         assert fn_type == fn_flow._FN_TYPE_AFTER
+
+
+class TestFnFlowRun:
+    def test_run(self):
+        pass

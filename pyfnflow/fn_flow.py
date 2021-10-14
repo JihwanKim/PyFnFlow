@@ -32,7 +32,7 @@ def run(functions: list[callable(any)]):
 
         elif isinstance(rs, FnOk):
             if fn_type == _FN_TYPE_BIND:
-                state.set_bind(bind_key, rs.data)
+                state.set_bind(bind_key, rs)
             elif fn_type == _FN_TYPE_DO:
                 state.set_result(rs)
             elif fn_type == _FN_TYPE_AFTER:
