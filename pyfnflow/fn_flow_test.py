@@ -1,4 +1,4 @@
-from pyfnflow import fn_flow
+from pyfnflow import fn_flow, fn_result
 
 
 class TestFnFlowBasicFunction:
@@ -17,5 +17,40 @@ class TestFnFlowBasicFunction:
 
 
 class TestFnFlowRun:
+    @staticmethod
+    def ok_with_hello():
+        return fn_result.FnOk("hello")
+
+    @staticmethod
+    def ok_with_hello2():
+        return fn_result.FnOk("hello2")
+
+    @staticmethod
+    def fail_with_hello():
+        return fn_result.FnFail("hello")
+
+    @staticmethod
+    def fail_with_hello2():
+        return fn_result.FnFail("hello2")
+
     def test_run(self):
-        pass
+        result = fn_flow.run(
+            [
+                fn_flow.b("bind_key", lambda _state: self.ok_with_hello()),
+                fn_flow.d(lambda state: fn_result.FnOk(state.get_bind("bind_key"))),
+                fn_flow.a(lambda _state: fn_result.FnOk("hello2"))
+            ]
+        )
+        assert isinstance(result, fn_result.FnOk) is True
+        assert result.data == self.ok_with_hello().data
+
+        result = fn_flow.run(
+            [
+                fn_flow.b("bind_key", lambda _state: self.ok_with_hello()),
+                fn_flow.b("bind_key", lambda _state: self.ok_with_hello2()),
+                fn_flow.d(lambda state: fn_result.FnOk(state.get_bind("bind_key"))),
+                fn_flow.a(lambda _state: fn_result.FnOk("hello2"))
+            ]
+        )
+        assert isinstance(result, fn_result.FnOk) is True
+        assert result.data == self.ok_with_hello2().data
